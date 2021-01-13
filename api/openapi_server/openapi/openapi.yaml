@@ -1,0 +1,277 @@
+openapi: 3.0.1
+info:
+  description: Cette API à été conçu pour un workshop organisé par les clubs App|ETS
+    et Cédille de l'ÉTS en collaboration avec la Banque Nationale du Canada.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: TODO API
+  version: 1.0.0
+servers:
+- url: /
+tags:
+- name: todo
+paths:
+  /todo/{user_uuid}:
+    post:
+      description: La TODO est créé puis ajouté dans le système, si l'utilisateur
+        n'existe pas dans le système, il est créé.
+      operationId: todo_user_uuid_post
+      parameters:
+      - description: UUID de l'utilisateur
+        explode: false
+        in: path
+        name: user_uuid
+        required: true
+        schema:
+          example: 27610244-2819-4022-8ed3-6a0763079751
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TodoRequest'
+      responses:
+        "201":
+          description: La TODO a bien été créé et ajouté à la liste des TODOs
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Si un des paramètres est manquant ou incorrect.
+      summary: Ajoute une TODO dans la liste de TODO de l'utilisateur désigné.
+      tags:
+      - todo
+      x-openapi-router-controller: openapi_server.controllers.todo_controller
+  /todo/{user_uuid}/{todo_id}:
+    delete:
+      operationId: todo_user_uuid_todo_id_delete
+      parameters:
+      - description: UUID de l'utilisateur
+        explode: false
+        in: path
+        name: user_uuid
+        required: true
+        schema:
+          example: 27610244-2819-4022-8ed3-6a0763079751
+          type: string
+        style: simple
+      - description: ID de la TODO
+        explode: false
+        in: path
+        name: todo_id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          description: La TODO à bien été supprimé dans le système.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: L'utilisateur ou bien la TODO n'existe pas dans le système.
+      summary: Supprime la TODO indiqué pour l'utilisateur désigné
+      tags:
+      - todo
+      x-openapi-router-controller: openapi_server.controllers.todo_controller
+    put:
+      description: La TODO est mise-à-jour dans le système.
+      operationId: todo_user_uuid_todo_id_put
+      parameters:
+      - description: UUID de l'utilisateur
+        explode: false
+        in: path
+        name: user_uuid
+        required: true
+        schema:
+          example: 27610244-2819-4022-8ed3-6a0763079751
+          type: string
+        style: simple
+      - description: ID de la TODO
+        explode: false
+        in: path
+        name: todo_id
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body'
+      responses:
+        "200":
+          description: La TODO a bien été modifiée.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400_1'
+          description: Si un des paramètres est manquant ou incorrect.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: L'utilisateur ou bien la TODO n'existe pas dans le système.
+      summary: Met à jour une TODO dans la liste de TODO de l'utilisateur désigné.
+      tags:
+      - todo
+      x-openapi-router-controller: openapi_server.controllers.todo_controller
+  /todos/{user_uuid}:
+    get:
+      operationId: todos_user_uuid_get
+      parameters:
+      - description: UUID de l'utilisateur
+        explode: false
+        in: path
+        name: user_uuid
+        required: true
+        schema:
+          example: 27610244-2819-4022-8ed3-6a0763079751
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+          description: Liste des todos de l'utilisateur
+        "404":
+          description: L'utilisateur n'existe pas dans le système.
+      summary: Récupère la liste des TODOs enregistré pour l'utilisateur désigné.
+      tags:
+      - todo
+      x-openapi-router-controller: openapi_server.controllers.todo_controller
+components:
+  schemas:
+    TodoRequest:
+      example:
+        description: Après le workshop j'ai vraiment envie d'essayer les technologies
+          mobile et devops présentées
+        title: Refaire le workshop d'App|ETS et CEDILLE
+      properties:
+        title:
+          description: Titre de la TODO.
+          example: Refaire le workshop d'App|ETS et CEDILLE
+          maxLength: 128
+          type: string
+        description:
+          description: Description de la TODO.
+          example: Après le workshop j'ai vraiment envie d'essayer les technologies
+            mobile et devops présentées
+          maxLength: 280
+          type: string
+      required:
+      - title
+      type: object
+    Todo:
+      example:
+        description: Après le workshop j'ai vraiment envie d'essayer les technologies
+          mobile et devops présentées
+        id: 0
+        title: Refaire le workshop d'App|ETS et CEDILLE
+        is_done: true
+        x-tablename: todos
+      properties:
+        id:
+          description: Identifiant unique de la TODO
+          format: int64
+          type: integer
+        is_done:
+          description: Si la TODO est marquée finie.
+          type: boolean
+        title:
+          description: Titre de la TODO.
+          example: Refaire le workshop d'App|ETS et CEDILLE
+          maxLength: 128
+          type: string
+        description:
+          description: Description de la TODO.
+          example: Après le workshop j'ai vraiment envie d'essayer les technologies
+            mobile et devops présentées
+          maxLength: 280
+          type: string
+        user_uuid:
+          description: UUID of the user that possess this todo
+          example: 80089c81-9a11-429f-9097-e954d866e19b
+          type: string
+      required:
+      - id
+      - is_done
+      - title
+      - user_uuid
+      type: object
+    inline_response_200:
+      example:
+        todos:
+        - description: Après le workshop j'ai vraiment envie d'essayer les technologies
+            mobile et devops présentées
+          id: 0
+          title: Refaire le workshop d'App|ETS et CEDILLE
+          is_done: true
+        - description: Après le workshop j'ai vraiment envie d'essayer les technologies
+            mobile et devops présentées
+          id: 0
+          title: Refaire le workshop d'App|ETS et CEDILLE
+          is_done: true
+      properties:
+        todos:
+          items:
+            $ref: '#/components/schemas/Todo'
+          type: array
+      type: object
+    inline_response_400:
+      properties:
+        code:
+          description: Error code
+          enum:
+          - title_missing
+          - title_too_long
+          - description_too_long
+          type: string
+      type: object
+    body:
+      allOf:
+      - $ref: '#/components/schemas/TodoRequest'
+      - $ref: '#/components/schemas/body_allOf'
+    inline_response_400_1:
+      properties:
+        code:
+          description: Error code
+          enum:
+          - title_missing
+          - title_too_long
+          - description_too_long
+          - is_done_missing
+          - is_done_invalid
+          type: string
+      type: object
+    inline_response_404:
+      description: Response 404
+      properties:
+        code:
+          description: Error code
+          enum:
+          - user_not_found
+          - todo_not_found
+          type: string
+      required:
+      - code
+      type: object
+    body_allOf:
+      properties:
+        is_done:
+          description: Si la TODO est marquée finie.
+          type: boolean
+      required:
+      - is_done
