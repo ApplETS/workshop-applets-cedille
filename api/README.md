@@ -40,6 +40,7 @@ Your environment should posses the following environment variables:
 - **DB_HOST**
 - **DB_PORT**
 - **DB_NAME**
+- **FLASK_ENV** should be equal to production
 
 To run the server on a Docker container, please execute the following from the root directory:
 
