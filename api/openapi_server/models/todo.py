@@ -16,12 +16,13 @@ class Todo(Model, db.Model):
     Do not edit the class manually.
     """
     __tablename__ = "Todos"
-    _id = db.Column(db.Integer, primary_key=True)
-    _is_done = db.Column(db.Boolean, unique=False, nullable=False, default=False)
-    _title = db.Column(db.String(64), unique=False, nullable=False)
-    _description = db.Column(db.String(256), unique=False, nullable=True)
+    kid = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    kis_done = db.Column(db.Boolean, unique=False, nullable=False, default=False)
+    ktitle = db.Column(db.String(64), unique=False, nullable=False)
+    kdescription = db.Column(db.String(256), unique=False, nullable=True)
+    kuser_uuid = db.Column(db.String(64), unique=False, nullable=False)
 
-    def __init__(self, id=None, is_done=None, title=None, description=None, user_uuid=None):  # noqa: E501
+    def __init__(self, is_done=None, title=None, description=None, user_uuid=None, id=None):  # noqa: E501
         """Todo - a model defined in OpenAPI
 
         :param id: The id of this Todo.  # noqa: E501
@@ -51,11 +52,20 @@ class Todo(Model, db.Model):
             'user_uuid': 'user_uuid'
         }
 
-        self._id = id
-        self._is_done = is_done
-        self._title = title
-        self._description = description
-        self._user_uuid = user_uuid
+        self.kid = id
+        self.kis_done = is_done
+        self.ktitle = title
+        self.kdescription = description
+        self.kuser_uuid = user_uuid
+
+    def to_dict(self):
+        return {
+            "id": self.kid,
+            "title": self.ktitle,
+            "description": self.kdescription,
+            "is_done": self.kis_done,
+            "user_uuid": self.kuser_uuid,
+        }
 
     @classmethod
     def from_dict(cls, dikt) -> 'Todo':
@@ -77,7 +87,7 @@ class Todo(Model, db.Model):
         :return: The id of this Todo.
         :rtype: int
         """
-        return self._id
+        return self.kid
 
     @id.setter
     def id(self, id):
@@ -91,7 +101,7 @@ class Todo(Model, db.Model):
         if id is None:
             raise ValueError("Invalid value for `id`, must not be `None`")  # noqa: E501
 
-        self._id = id
+        self.kid = id
 
     @property
     def is_done(self):
@@ -102,7 +112,7 @@ class Todo(Model, db.Model):
         :return: The is_done of this Todo.
         :rtype: bool
         """
-        return self._is_done
+        return self.kis_done
 
     @is_done.setter
     def is_done(self, is_done):
@@ -116,7 +126,7 @@ class Todo(Model, db.Model):
         if is_done is None:
             raise ValueError("Invalid value for `is_done`, must not be `None`")  # noqa: E501
 
-        self._is_done = is_done
+        self.kis_done = is_done
 
     @property
     def title(self):
@@ -127,7 +137,7 @@ class Todo(Model, db.Model):
         :return: The title of this Todo.
         :rtype: str
         """
-        return self._title
+        return self.ktitle
 
     @title.setter
     def title(self, title):
@@ -143,7 +153,7 @@ class Todo(Model, db.Model):
         if title is not None and len(title) > 128:
             raise ValueError("Invalid value for `title`, length must be less than or equal to `128`")  # noqa: E501
 
-        self._title = title
+        self.ktitle = title
 
     @property
     def description(self):
@@ -154,7 +164,7 @@ class Todo(Model, db.Model):
         :return: The description of this Todo.
         :rtype: str
         """
-        return self._description
+        return self.kdescription
 
     @description.setter
     def description(self, description):
@@ -168,7 +178,7 @@ class Todo(Model, db.Model):
         if description is not None and len(description) > 280:
             raise ValueError("Invalid value for `description`, length must be less than or equal to `280`")  # noqa: E501
 
-        self._description = description
+        self.kdescription = description
 
     @property
     def user_uuid(self):
@@ -179,7 +189,7 @@ class Todo(Model, db.Model):
         :return: The user_uuid of this Todo.
         :rtype: str
         """
-        return self._user_uuid
+        return self.kuser_uuid
 
     @user_uuid.setter
     def user_uuid(self, user_uuid):
@@ -193,4 +203,4 @@ class Todo(Model, db.Model):
         if user_uuid is not None and len(user_uuid) > 280:
             raise ValueError("Invalid value for `user_uuid`, length must be less than or equal to `280`")  # noqa: E501
 
-        self._user_uuid = user_uuid
+        self.kuser_uuid = user_uuid
