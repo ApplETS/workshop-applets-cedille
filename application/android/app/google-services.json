@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "346916953847",
+    "project_id": "appletsworkshop-5f2bb",
+    "storage_bucket": "appletsworkshop-5f2bb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346916953847:android:45101433a120a979df3df2",
+        "android_client_info": {
+          "package_name": "com.example.application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "346916953847-sr8pq9vuvssp4m6qr17o5fotbf1gcfkc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5Hs3IDqk2hHIVpoLY7cV8_fQbW3nEbtk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "346916953847-sr8pq9vuvssp4m6qr17o5fotbf1gcfkc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
